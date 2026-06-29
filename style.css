@@ -85,7 +85,25 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0;
+  min-width: 0;
+}
+
+.brand-logo-faveni {
+  width: 150px;
+  max-width: 150px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-divider {
+  width: 1px;
+  height: 42px;
+  background: rgba(0, 80, 45, 0.18);
+  margin: 0 18px;
+  flex-shrink: 0;
 }
 
 .brand-icon {
@@ -404,6 +422,16 @@ h1, h2, h3, p {
 @media (max-width: 640px) {
   .hero {
     padding: 12px 12px 10px;
+  }
+
+    .brand-logo-faveni {
+    width: 120px;
+    max-width: 120px;
+  }
+
+  .brand-divider {
+    height: 34px;
+    margin: 0 12px;
   }
 
   .topbar {

@@ -451,6 +451,7 @@ h1, h2, h3, p {
     flex-direction: column;
     padding: 0 12px;
   }
+  
   .brand-faveni {
   height: 32px;
   width: auto;
@@ -459,6 +460,7 @@ h1, h2, h3, p {
   margin-left: 14px;
   padding-left: 14px;
   border-left: 1px solid rgba(0, 80, 45, 0.16);
+  }
 }
 
 @media (max-width: 640px) {

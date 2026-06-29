@@ -479,20 +479,4 @@ h1, h2, h3, p {
     flex-direction: column;
     padding: 0 12px;
   }
-  /* ==========================
-   LOGO GRUPO FAVENI
-========================== */
-
-.brand-logo-faveni {
-  height: 46px;
-  width: auto;
-  display: block;
-}
-
-.brand-divider {
-  width: 1px;
-  height: 42px;
-  background: rgba(0, 80, 45, 0.18);
-  margin: 0 18px;
-}
 }

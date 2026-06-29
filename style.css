@@ -85,18 +85,29 @@ body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0;
 }
 
-.brand-icon {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--green), var(--green-2));
-  color: #fff;
-  box-shadow: 0 14px 30px rgba(11, 127, 79, 0.28);
+.brand-logo {
+  width: 170px;
+  max-width: 170px;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-divider {
+  width: 1px;
+  height: 42px;
+  background: rgba(0, 80, 45, 0.35);
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+.brand-text strong,
+.brand-text span {
+  display: block;
 }
 
 .brand strong,
@@ -404,6 +415,16 @@ h1, h2, h3, p {
 @media (max-width: 640px) {
   .hero {
     padding: 12px 12px 10px;
+  }
+
+  .brand-logo {
+  width: 135px;
+  max-width: 135px;
+  }
+
+.brand-divider {
+  height: 34px;
+  margin: 0 12px;
   }
 
   .topbar {

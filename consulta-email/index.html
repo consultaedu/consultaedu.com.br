@@ -1,1 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consulta do E-mail Institucional</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-bg">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
 
+  <header class="hero">
+    <nav class="topbar">
+  <div class="brand">
+    <img src="grupo-faveni.png" alt="Grupo Educacional FAVENI" class="brand-logo">
+
+    <div class="brand-divider"></div>
+
+    <div class="brand-text">
+      <strong>ConsultaEdu</strong>
+      <span>Consulta do E-mail Institucional</span>
+    </div>
+  </div>
+
+  <a class="topbar-link" href="https://consultaedu.com.br/">
+    ← Voltar ao Portal
+  </a>
+</nav>
+
+    <section class="hero-content">
+      <div class="hero-copy">
+        <div class="eyebrow">Consulta rápida e segura</div>
+        <h1>Encontre seu e-mail institucional em poucos segundos.</h1>
+        <p>
+          Digite seu nome completo ou matrícula para localizar seu acesso ao ambiente acadêmico.
+          Após a consulta, use o e-mail informado para entrar no Google Sala de Aula.
+        </p>
+        <div class="hero-badges">
+          <span>✓ UNIFAVENI</span>
+          <span>✓ UNIABEU</span>
+          <span>✓ UNISBA</span>
+        </div>
+      </div>
+
+      <div class="hero-panel" aria-hidden="true">
+        <div class="mini-card active">
+          <span>📧</span>
+          <div>
+            <strong>E-mail institucional</strong>
+            <small>Consulta por nome ou matrícula</small>
+          </div>
+        </div>
+        <div class="mini-card">
+          <span>🔑</span>
+          <div>
+            <strong>Senha inicial</strong>
+            <small>Disponível quando cadastrada</small>
+          </div>
+        </div>
+        <div class="mini-card">
+          <span>🎓</span>
+          <div>
+            <strong>Google Classroom</strong>
+            <small>Acesso direto às aulas</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main class="main-layout">
+    <section class="search-card" aria-labelledby="titulo-consulta">
+      <div class="card-header">
+        <div class="card-icon">🔎</div>
+        <div>
+          <h2 id="titulo-consulta">Consultar e-mail</h2>
+          <p>Informe seu nome completo ou matrícula.</p>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="busca">Nome completo ou matrícula</label>
+        <div class="input-shell">
+          <span>⌕</span>
+          <input id="busca" type="text" autocomplete="off" placeholder="Ex.: João da Silva ou 012345" onkeydown="handleEnter(event)" />
+        </div>
+      </div>
+
+      <button id="btn" class="primary-btn" onclick="consultar()">
+        <span>Consultar agora</span>
+        <strong>→</strong>
+      </button>
+
+      <div id="loading" class="loading" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <span>Pesquisando cadastro...</span>
+      </div>
+
+      <div id="retorno" class="results" aria-live="polite"></div>
+
+      <div class="notice-grid">
+        <div class="notice soft">
+          <strong>⏳ Recém-matriculado?</strong>
+          <span>Aguarde a liberação do e-mail institucional.</span>
+        </div>
+        <div class="notice warning">
+          <strong>⚠️ Não encontrou?</strong>
+          <span>Tente digitar sem acentos ou use a matrícula.</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="info-card" aria-labelledby="titulo-classroom">
+      <div class="info-hero">
+        <div class="info-icon">🚀</div>
+        <h2 id="titulo-classroom">Acesse o Google Sala de Aula</h2>
+        <p>
+          Depois de encontrar seu e-mail institucional, acesse o Classroom e faça login usando o endereço informado na consulta.
+        </p>
+        <a class="secondary-btn" href="https://classroom.google.com" target="_blank" rel="noopener noreferrer">
+          Abrir Google Sala de Aula
+        </a>
+      </div>
+
+      <div class="steps">
+        <a class="step-card" href="https://drive.google.com/file/d/1C1Gi6L8xB6NpAk1MniViTGx2w_5npl6U/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <span>💻</span>
+          <div>
+            <strong>Tutorial para computador</strong>
+            <small>Veja como entrar pelo notebook ou PC.</small>
+          </div>
+        </a>
+
+        <a class="step-card" href="https://drive.google.com/file/d/1neYusD5PGZJX03I6_sOutcZrgISVScFg/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+          <span>📱</span>
+          <div>
+            <strong>Tutorial para celular</strong>
+            <small>Android e iOS.</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="support-box">
+        <strong>Suporte de acesso</strong>
+        <span>suporte.acesso@unifaveni.com.br</span>
+        <span>WhatsApp: 27 99816-7072</span>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+  <span>ConsultaEdu | Consulta do E-mail Institucional</span>
+  <span>Versão 1.0 - By Marcos Daleprane</span>
+</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

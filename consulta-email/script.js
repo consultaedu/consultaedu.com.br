@@ -1,3 +1,4 @@
+alert("SCRIPT NOVO - TESTE");
 const API_URL = "https://script.google.com/macros/s/AKfycbxjZc4ZAbMdHEf38zuprYlcnzwDQsWiSf64DHX48RPtqGB7ShiHncpGZurRSisZXShbvg/exec";
 
 const logos = {

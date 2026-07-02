@@ -12,6 +12,7 @@ function normalizar(texto = "") {
   return texto
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
     .toLowerCase()
     .trim();
 }
@@ -40,7 +41,7 @@ async function consultar() {
   const retorno = document.getElementById("retorno");
   const loading = document.getElementById("loading");
   const botao = document.getElementById("btn");
-  const q = campo.value.trim();
+  const q = campo.value.replace(/\s+/g, " ").trim();
 
   if (!q) {
     renderMessage("erro", "⚠️ Atenção", "Digite seu nome completo ou matrícula para realizar a consulta.");

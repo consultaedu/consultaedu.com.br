@@ -1,4 +1,4 @@
-const MANUTENCAO = true;
+const MANUTENCAO = false;
 
 if (MANUTENCAO) {
     document.body.innerHTML = `

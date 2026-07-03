@@ -1,25 +1,3 @@
-const MANUTENCAO = false;
-
-if (MANUTENCAO) {
-    document.body.innerHTML = `
-    <div style="
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-        font-family:Arial,sans-serif;
-        background:#f4f7fb;
-        text-align:center;
-    ">
-        <div>
-            <h1>🛠️ Em manutenção</h1>
-            <p>Estamos realizando melhorias no sistema.</p>
-            <p>Voltaremos em breve.</p>
-        </div>
-    </div>`;
-    throw new Error("Sistema em manutenção");
-}
-
 const API_URL = "https://script.google.com/macros/s/AKfycbzf7NU3lCTZrAoS88jsyByrkpKJyhvsyGqnClizCcp1q9vrvlXKDlHZh-BZnwYL6TK_XA/exec";
 
 let dados = [];

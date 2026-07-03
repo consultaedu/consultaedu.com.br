@@ -14,7 +14,7 @@
 const MANUTENCAO = true;
 
 if (MANUTENCAO) {
-    window.location.replace("/manutencao.html");
+    window.location.replace("/manutencao.html?origem=" + encodeURIComponent(location.pathname));
 }
 </script>
 

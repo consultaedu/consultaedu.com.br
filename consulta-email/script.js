@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbxjZc4ZAbMdHEf38zuprYlcnzwDQsWiSf64DHX48RPtqGB7ShiHncpGZurRSisZXShbvg/exec";
+const API_URL = "https://consultaedu-email-api.marcosdalleprane2.workers.dev/";
 
 const logos = {
   UNISBA: "https://raw.githubusercontent.com/suportemarcos-rgb/logos-email-aluno/main/images-Photoroom.png",

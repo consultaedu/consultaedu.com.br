@@ -3,6 +3,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzf7NU3lCTZrAoS88jsyByr
 let dados = [];
 
 const selectFaculdade = document.getElementById("faculdade");
+const selectTurma = document.getElementById("turma");
 const selectCurso = document.getElementById("curso");
 const selectPeriodo = document.getElementById("periodo");
 
@@ -23,9 +24,19 @@ const ordemDias = {
   "Sabado": 6
 };
 
-fetch(API_URL)
-  .then(res => res.json())
+fetch(API_URL, { cache: "no-store" })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`A API respondeu com status ${res.status}.`);
+    }
+
+    return res.json();
+  })
   .then(json => {
+    if (!Array.isArray(json)) {
+      throw new Error(json?.mensagem || "A API não retornou uma lista de horários.");
+    }
+
     dados = json;
     carregarFaculdades();
   })
@@ -35,93 +46,127 @@ fetch(API_URL)
   });
 
 function carregarFaculdades() {
-  selectFaculdade.innerHTML = '<option value="">Selecione a faculdade</option>';
-
-  const faculdades = [...new Set(dados.map(item => item.faculdade))].sort();
-
-  faculdades.forEach(faculdade => {
-    const option = document.createElement("option");
-    option.value = faculdade;
-    option.textContent = faculdade;
-    selectFaculdade.appendChild(option);
-  });
+  preencherSelect(
+    selectFaculdade,
+    valoresUnicos(dados, "faculdade"),
+    "Selecione a faculdade"
+  );
 }
 
 selectFaculdade.addEventListener("change", () => {
-  selectCurso.innerHTML = '<option value="">Selecione o curso</option>';
-  selectPeriodo.innerHTML = '<option value="">Selecione o período</option>';
-
-  selectCurso.disabled = true;
-  selectPeriodo.disabled = true;
-  resultado.classList.add("oculto");
+  resetSelect(selectTurma, "Selecione a turma");
+  resetSelect(selectCurso, "Selecione o curso");
+  resetSelect(selectPeriodo, "Selecione o período");
+  ocultarResultado();
 
   const faculdade = selectFaculdade.value;
   if (!faculdade) return;
 
-  const cursos = [...new Set(
-    dados
-      .filter(item => item.faculdade === faculdade)
-      .map(item => item.curso)
-  )].sort();
+  const turmas = valoresUnicos(
+    dados.filter(item => item.faculdade === faculdade),
+    "turma"
+  );
 
-  cursos.forEach(curso => {
-    const option = document.createElement("option");
-    option.value = curso;
-    option.textContent = curso;
-    selectCurso.appendChild(option);
-  });
+  preencherSelect(selectTurma, turmas, "Selecione a turma");
+});
 
-  selectCurso.disabled = false;
+selectTurma.addEventListener("change", () => {
+  resetSelect(selectCurso, "Selecione o curso");
+  resetSelect(selectPeriodo, "Selecione o período");
+  ocultarResultado();
+
+  const faculdade = selectFaculdade.value;
+  const turma = selectTurma.value;
+
+  if (!faculdade || !turma) return;
+
+  const cursos = valoresUnicos(
+    dados.filter(item =>
+      item.faculdade === faculdade &&
+      item.turma === turma
+    ),
+    "curso"
+  );
+
+  preencherSelect(selectCurso, cursos, "Selecione o curso");
 });
 
 selectCurso.addEventListener("change", () => {
-  selectPeriodo.innerHTML = '<option value="">Selecione o período</option>';
-  selectPeriodo.disabled = true;
-  resultado.classList.add("oculto");
+  resetSelect(selectPeriodo, "Selecione o período");
+  ocultarResultado();
 
   const faculdade = selectFaculdade.value;
+  const turma = selectTurma.value;
   const curso = selectCurso.value;
 
-  if (!faculdade || !curso) return;
+  if (!faculdade || !turma || !curso) return;
 
-  const periodos = [...new Set(
-    dados
-      .filter(item =>
-        item.faculdade === faculdade &&
-        item.curso === curso &&
-        item.periodo
-      )
-      .map(item => item.periodo)
-  )].sort();
+  const periodos = valoresUnicos(
+    dados.filter(item =>
+      item.faculdade === faculdade &&
+      item.turma === turma &&
+      item.curso === curso &&
+      item.periodo
+    ),
+    "periodo"
+  );
 
-  periodos.forEach(periodo => {
-    const option = document.createElement("option");
-    option.value = periodo;
-    option.textContent = periodo;
-    selectPeriodo.appendChild(option);
-  });
-
-  selectPeriodo.disabled = false;
+  preencherSelect(selectPeriodo, periodos, "Selecione o período");
 });
 
 selectPeriodo.addEventListener("change", () => {
   const faculdade = selectFaculdade.value;
+  const turma = selectTurma.value;
   const curso = selectCurso.value;
   const periodo = selectPeriodo.value;
 
-  if (!faculdade || !curso || !periodo) {
-    resultado.classList.add("oculto");
+  if (!faculdade || !turma || !curso || !periodo) {
+    ocultarResultado();
     return;
   }
 
   const aulasCurso = dados.filter(item =>
     item.faculdade === faculdade &&
+    item.turma === turma &&
     item.curso === curso &&
     item.periodo === periodo
   );
 
   mostrarResultado(aulasCurso);
 });
+
+function valoresUnicos(lista, campo) {
+  return [...new Set(
+    lista
+      .map(item => String(item[campo] || "").trim())
+      .filter(Boolean)
+  )].sort((a, b) => a.localeCompare(b, "pt-BR", { numeric: true }));
+}
+
+function preencherSelect(select, valores, textoInicial) {
+  select.innerHTML = `<option value="">${textoInicial}</option>`;
+
+  valores.forEach(valor => {
+    const option = document.createElement("option");
+    option.value = valor;
+    option.textContent = valor;
+    select.appendChild(option);
+  });
+
+  select.disabled = valores.length === 0;
+}
+
+function resetSelect(select, textoInicial) {
+  select.innerHTML = `<option value="">${textoInicial}</option>`;
+  select.disabled = true;
+}
+
+function ocultarResultado() {
+  resultado.classList.add("oculto");
+  aulaAgora.innerHTML = "";
+  proximaAula.innerHTML = "";
+  gradeHorarios.innerHTML = "";
+}
 
 function mostrarResultado(aulas) {
   resultado.classList.remove("oculto");
@@ -135,7 +180,7 @@ function mostrarResultado(aulas) {
     const inicio = horaParaMinutos(aula.horaInicio);
     const fim = horaParaMinutos(aula.horaFim);
 
-    return dia === diaAtual && minutosAgora >= inicio && minutosAgora <= fim;
+    return dia === diaAtual && minutosAgora >= inicio && minutosAgora < fim;
   });
 
   if (aulaAtual) {
@@ -143,7 +188,7 @@ function mostrarResultado(aulas) {
   } else {
     aulaAgora.innerHTML = `
       <div class="status">🔴 Nenhuma aula acontecendo agora</div>
-      <p>Não há aula em andamento neste momento para este curso e período.</p>
+      <p>Não há aula em andamento neste momento para esta turma, curso e período.</p>
     `;
   }
 
@@ -166,7 +211,7 @@ function encontrarProximaAula(aulas) {
   const diaAtual = agora.getDay();
   const minutosAgora = agora.getHours() * 60 + agora.getMinutes();
 
-  let candidatas = [];
+  const candidatas = [];
 
   aulas.forEach(aula => {
     const diaAula = ordemDias[aula.dia];

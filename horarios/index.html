@@ -63,7 +63,7 @@ if (MANUTENCAO) {
       <div class="eyebrow">Horários online</div>
       <h1>Consulte os horários das suas aulas</h1>
       <p>
-        Selecione sua instituição e curso para visualizar a aula acontecendo agora,
+        Selecione sua instituição, turma, curso e período para visualizar a aula acontecendo agora,
         a próxima aula e o horário completo.
       </p>
 
@@ -95,7 +95,7 @@ if (MANUTENCAO) {
         <span>🎓</span>
         <div>
           <strong>Por curso</strong>
-          <small>Escolha a instituição e o curso desejado</small>
+          <small>Escolha a instituição, turma e curso desejado</small>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@ if (MANUTENCAO) {
       <div class="card-icon">🔎</div>
       <div>
         <h2>Consultar horários</h2>
-        <p>Informe sua instituição e curso para continuar.</p>
+        <p>Informe sua instituição, turma, curso e período para continuar.</p>
       </div>
     </div>
 
@@ -119,6 +119,16 @@ if (MANUTENCAO) {
         <span>🏫</span>
         <select id="faculdade">
           <option value="">Selecione a faculdade</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="turma">Turma</label>
+      <div class="select-shell">
+        <span>👥</span>
+        <select id="turma" disabled>
+          <option value="">Selecione a turma</option>
         </select>
       </div>
     </div>
@@ -161,6 +171,6 @@ if (MANUTENCAO) {
   <span>Versão 1.0 - By Marcos Daleprane</span>
 </footer>
 
-<script src="script.js?v=14"></script>
+<script src="script.js?v=15"></script>
 </body>
 </html>

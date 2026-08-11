@@ -505,6 +505,58 @@ p {
   line-height: 1.6;
 }
 
+.card-aula-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 330px);
+  gap: 28px;
+  align-items: center;
+}
+
+.card-aula-principal {
+  min-width: 0;
+}
+
+.aviso-acesso {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(11, 127, 79, 0.16);
+  background: linear-gradient(135deg, rgba(223, 248, 236, 0.88), rgba(255, 255, 255, 0.92));
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.aviso-acesso-icone {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #fff;
+  font-size: 20px;
+  box-shadow: 0 8px 20px rgba(5, 35, 22, 0.08);
+}
+
+.aviso-acesso strong,
+.aviso-acesso span {
+  display: block;
+}
+
+.aviso-acesso strong {
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+
+.aviso-acesso span {
+  color: #526258;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 .botoes {
   margin-top: 18px;
   display: flex;
@@ -580,6 +632,15 @@ p {
 }
 
 @media (max-width: 980px) {
+  .card-aula-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .aviso-acesso {
+    max-width: 560px;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     padding-top: 38px;

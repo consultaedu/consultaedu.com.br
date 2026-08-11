@@ -240,13 +240,25 @@ function encontrarProximaAula(aulas) {
 
 function montarCardAula(titulo, aula) {
   return `
-    <div class="status">${titulo}</div>
-    <div class="disciplina">${aula.disciplina}</div>
-    <div class="horario">${aula.dia} • ${aula.horaInicio} às ${aula.horaFim}</div>
-    ${aula.observacao ? `<p>${aula.observacao}</p>` : ""}
-    <div class="botoes">
-      ${aula.linkClassroom ? `<a class="botao" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar Classroom</a>` : ""}
-      ${aula.linkMeet ? `<a class="botao secundario" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar no Meet</a>` : ""}
+    <div class="card-aula-layout">
+      <div class="card-aula-principal">
+        <div class="status">${titulo}</div>
+        <div class="disciplina">${aula.disciplina}</div>
+        <div class="horario">${aula.dia} • ${aula.horaInicio} às ${aula.horaFim}</div>
+        ${aula.observacao ? `<p>${aula.observacao}</p>` : ""}
+        <div class="botoes">
+          ${aula.linkClassroom ? `<a class="botao" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar Classroom</a>` : ""}
+          ${aula.linkMeet ? `<a class="botao secundario" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar no Meet</a>` : ""}
+        </div>
+      </div>
+
+      <aside class="aviso-acesso" aria-label="Observação sobre acesso">
+        <div class="aviso-acesso-icone">🔐</div>
+        <div>
+          <strong>Acesso às aulas</strong>
+          <span>Classroom e Meet só podem ser acessados com o e-mail institucional do aluno.</span>
+        </div>
+      </aside>
     </div>
   `;
 }

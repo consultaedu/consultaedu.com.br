@@ -247,8 +247,8 @@ function montarCardAula(titulo, aula) {
         <div class="horario">${aula.dia} • ${aula.horaInicio} às ${aula.horaFim}</div>
         ${aula.observacao ? `<p>${aula.observacao}</p>` : ""}
         <div class="botoes">
-          ${aula.linkClassroom ? `<a class="botao" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar o Google Sala de Aula</a>` : ""}
-          ${aula.linkMeet ? `<a class="botao secundario" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar na Aula Ao Vivo</a>` : ""}
+          ${aula.linkClassroom ? `<a class="botao" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar na Aula Ao Vivo</a>` : ""}
+          ${aula.linkMeet ? `<a class="botao secundario" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar o Google Sala de Aula</a>` : ""}
         </div>
       </div>
 

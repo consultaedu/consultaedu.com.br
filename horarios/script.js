@@ -31,9 +31,13 @@ const ordemDias = {
 
 carregarBaseHorarios();
 
-botaoTentarNovamente.addEventListener("click", carregarBaseHorarios);
+if (botaoTentarNovamente) {
+  botaoTentarNovamente.addEventListener("click", carregarBaseHorarios);
+}
 
 function carregarBaseHorarios() {
+  // Mostra novamente o aviso caso seja uma tentativa após erro.
+  carregamentoBase.hidden = false;
   carregamentoBase.classList.remove("oculto", "erro");
 
   carregamentoTitulo.textContent = "Carregando a base de horários...";
@@ -42,53 +46,65 @@ function carregarBaseHorarios() {
 
   botaoTentarNovamente.hidden = true;
 
-  selectFaculdade.disabled = true;
+  // Não permite seleção até a base chegar.
+  resetSelect(selectFaculdade, "Selecione a faculdade");
+  resetSelect(selectTurma, "Selecione a turma");
+  resetSelect(selectCurso, "Selecione o curso");
+  resetSelect(selectPeriodo, "Selecione o período");
+  ocultarResultado();
 
-  fetch(API_URL, {
-    cache: "no-store"
-  })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`A API respondeu com status ${res.status}.`);
-      }
-
-      return res.json();
-    })
-
+  // Mantém o mesmo formato de requisição que já funcionava no site.
+  fetch(API_URL)
+    .then(res => res.json())
     .then(json => {
-      if (!Array.isArray(json)) {
+      // Aceita tanto a API atual (array direto) quanto um eventual retorno { dados: [...] }.
+      const lista = Array.isArray(json)
+        ? json
+        : (json && Array.isArray(json.dados) ? json.dados : null);
+
+      if (!lista) {
         throw new Error(
-          json?.mensagem ||
+          (json && json.mensagem) ||
           "A API não retornou uma lista de horários."
         );
       }
 
-      dados = json;
-
+      dados = lista;
       carregarFaculdades();
 
       carregamentoTitulo.textContent = "Horários carregados!";
       carregamentoMensagem.textContent =
         "Agora você já pode selecionar sua instituição.";
 
+      // Mostra a confirmação rapidamente e depois remove o card do layout.
       setTimeout(() => {
         carregamentoBase.classList.add("oculto");
-      }, 700);
-    })
 
+        setTimeout(() => {
+          carregamentoBase.hidden = true;
+        }, 300);
+      }, 600);
+    })
     .catch(err => {
       console.error("Erro ao carregar horários:", err);
 
+      carregamentoBase.hidden = false;
+      carregamentoBase.classList.remove("oculto");
       carregamentoBase.classList.add("erro");
 
       carregamentoTitulo.textContent =
         "Não foi possível carregar os horários.";
 
       carregamentoMensagem.textContent =
-        "Verifique sua conexão e tente novamente.";
+        "Tente novamente. Se o problema continuar, atualize a página.";
 
       botaoTentarNovamente.hidden = false;
     });
+}
+
+function carregarFaculdades() {
+  const faculdades = valoresUnicos(dados, "faculdade");
+  preencherSelect(selectFaculdade, faculdades, "Selecione a faculdade");
 }
 
 selectFaculdade.addEventListener("change", () => {
@@ -285,8 +301,8 @@ function montarCardAula(titulo, aula) {
         <div class="horario">${aula.dia} • ${aula.horaInicio} às ${aula.horaFim}</div>
         ${aula.observacao ? `<p>${aula.observacao}</p>` : ""}
         <div class="botoes">
-          ${aula.linkClassroom ? `<a class="botao" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar na Aula Ao Vivo</a>` : ""}
-          ${aula.linkMeet ? `<a class="botao secundario" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar o Google Sala de Aula</a>` : ""}
+          ${aula.linkMeet ? `<a class="botao" href="${corrigirLink(aula.linkMeet)}" target="_blank" rel="noopener noreferrer">Entrar na Aula Ao Vivo</a>` : ""}
+          ${aula.linkClassroom ? `<a class="botao secundario" href="${corrigirLink(aula.linkClassroom)}" target="_blank" rel="noopener noreferrer">Acessar o Google Sala de Aula</a>` : ""}
         </div>
       </div>
 

@@ -468,7 +468,7 @@ p {
 }
 
 .result-card.destaque {
-  border-left: 7px solid var(--red);
+  border-left: 7px solid var(--green);
 }
 
 .result-card.secundaria {
@@ -495,7 +495,7 @@ p {
 }
 
 .horario {
-  color: var(--muted);
+  color: var(--green);
   font-weight: 800;
 }
 
@@ -747,6 +747,10 @@ p {
   box-shadow: 0 15px 45px rgba(5, 35, 22, 0.10);
 
   transition: opacity .3s ease, transform .3s ease;
+}
+
+.carregamento-base[hidden] {
+  display: none;
 }
 
 .carregamento-base.oculto {

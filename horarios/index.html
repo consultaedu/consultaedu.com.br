@@ -117,7 +117,7 @@ if (MANUTENCAO) {
       <label for="faculdade">Instituição</label>
       <div class="select-shell">
         <span>🏫</span>
-        <select id="faculdade">
+        <select id="faculdade" disabled>
           <option value="">Selecione a faculdade</option>
         </select>
       </div>
@@ -153,6 +153,24 @@ if (MANUTENCAO) {
       </div>
     </div>
   </section>
+
+  <div id="carregamentoBase" class="carregamento-base">
+    <div class="carregamento-spinner"></div>
+
+    <div class="carregamento-texto">
+      <strong id="carregamentoTitulo">
+        Carregando a base de horários...
+      </strong>
+
+      <span id="carregamentoMensagem">
+         Na primeira abertura, isso pode levar alguns segundos.
+      </span>
+    </div>
+
+    <button id="botaoTentarNovamente" class="botao-recarregar" hidden>
+      Tentar novamente
+    </button>
+  </div>
 
 </main>
 

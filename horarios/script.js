@@ -2,6 +2,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzf7NU3lCTZrAoS88jsyByr
 
 let dados = [];
 
+const carregamentoBase = document.getElementById("carregamentoBase");
+const carregamentoTitulo = document.getElementById("carregamentoTitulo");
+const carregamentoMensagem = document.getElementById("carregamentoMensagem");
+const botaoTentarNovamente = document.getElementById("botaoTentarNovamente");
+
 const selectFaculdade = document.getElementById("faculdade");
 const selectTurma = document.getElementById("turma");
 const selectCurso = document.getElementById("curso");
@@ -24,33 +29,66 @@ const ordemDias = {
   "Sabado": 6
 };
 
-fetch(API_URL, { cache: "no-store" })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error(`A API respondeu com status ${res.status}.`);
-    }
+carregarBaseHorarios();
 
-    return res.json();
+botaoTentarNovamente.addEventListener("click", carregarBaseHorarios);
+
+function carregarBaseHorarios() {
+  carregamentoBase.classList.remove("oculto", "erro");
+
+  carregamentoTitulo.textContent = "Carregando a base de horários...";
+  carregamentoMensagem.textContent =
+    "Na primeira abertura, isso pode levar alguns segundos.";
+
+  botaoTentarNovamente.hidden = true;
+
+  selectFaculdade.disabled = true;
+
+  fetch(API_URL, {
+    cache: "no-store"
   })
-  .then(json => {
-    if (!Array.isArray(json)) {
-      throw new Error(json?.mensagem || "A API não retornou uma lista de horários.");
-    }
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`A API respondeu com status ${res.status}.`);
+      }
 
-    dados = json;
-    carregarFaculdades();
-  })
-  .catch(err => {
-    console.error("Erro ao carregar horários:", err);
-    alert("Erro ao carregar os horários. Verifique o Apps Script.");
-  });
+      return res.json();
+    })
 
-function carregarFaculdades() {
-  preencherSelect(
-    selectFaculdade,
-    valoresUnicos(dados, "faculdade"),
-    "Selecione a faculdade"
-  );
+    .then(json => {
+      if (!Array.isArray(json)) {
+        throw new Error(
+          json?.mensagem ||
+          "A API não retornou uma lista de horários."
+        );
+      }
+
+      dados = json;
+
+      carregarFaculdades();
+
+      carregamentoTitulo.textContent = "Horários carregados!";
+      carregamentoMensagem.textContent =
+        "Agora você já pode selecionar sua instituição.";
+
+      setTimeout(() => {
+        carregamentoBase.classList.add("oculto");
+      }, 700);
+    })
+
+    .catch(err => {
+      console.error("Erro ao carregar horários:", err);
+
+      carregamentoBase.classList.add("erro");
+
+      carregamentoTitulo.textContent =
+        "Não foi possível carregar os horários.";
+
+      carregamentoMensagem.textContent =
+        "Verifique sua conexão e tente novamente.";
+
+      botaoTentarNovamente.hidden = false;
+    });
 }
 
 selectFaculdade.addEventListener("change", () => {

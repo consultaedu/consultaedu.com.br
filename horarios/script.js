@@ -294,7 +294,7 @@ function montarCardAula(titulo, aula) {
         <div class="aviso-acesso-icone">🔐</div>
         <div>
           <strong>Acesso às aulas</strong>
-          <span>Classroom e Meet só podem ser acessados com o e-mail institucional do aluno.</span>
+          <span>Google Sala de Aula e a Aula Ao Vivo só podem ser acessados com o e-mail institucional do aluno.</span>
         </div>
       </aside>
     </div>

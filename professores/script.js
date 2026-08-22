@@ -7,7 +7,7 @@
   Exemplo:
   const API_URL = "https://script.google.com/macros/s/SEU_DEPLOY/exec";
 */
-const API_URL = "";
+const API_URL = "https://script.google.com/macros/s/AKfycbwkXi13cjf_j5ik-h2XczwHnNnPZS0aMc8mcPlocgHaQhQPo4KG4Hn9n1F4O-PnuvdU9Q/exec";
 const BASE_LOCAL_URL = "professores.json";
 
 const TIMEZONE = "America/Sao_Paulo";
@@ -112,10 +112,10 @@ document.addEventListener("click", event => {
 
 function carregarBaseProfessores() {
   carregamentoBase.hidden = false;
-  carregamentoBase.classList.remove("oculto", "erro");
+  carregamentoBase.classList.remove("oculto", "erro", "aviso");
 
   carregamentoTitulo.textContent = "Carregando a base de professores...";
-  carregamentoMensagem.textContent = "Na primeira abertura, isso pode levar alguns segundos.";
+  carregamentoMensagem.textContent = "Consultando a base atualizada.";
   botaoTentarNovamente.hidden = true;
 
   buscaProfessor.disabled = true;
@@ -125,27 +125,8 @@ function carregarBaseProfessores() {
   fecharSugestoes();
   ocultarResultado();
 
-  const fonte = API_URL.trim() || BASE_LOCAL_URL;
-
-  fetch(fonte, { cache: "no-store" })
-    .then(res => {
-      if (!res.ok) {
-        throw new Error(`Falha HTTP ${res.status}`);
-      }
-      return res.json();
-    })
-    .then(json => {
-      const lista = Array.isArray(json)
-        ? json
-        : (json && Array.isArray(json.dados) ? json.dados : null);
-
-      if (!lista) {
-        throw new Error(
-          (json && json.mensagem) ||
-          "A fonte de dados não retornou uma lista de aulas."
-        );
-      }
-
+  carregarFonteDados()
+    .then(({ lista, origem }) => {
       sessoes = lista
         .map(normalizarRegistro)
         .filter(item => item.idProfessor && item.professor && item.dia);
@@ -158,9 +139,16 @@ function carregarBaseProfessores() {
 
       buscaProfessor.disabled = false;
 
-      carregamentoTitulo.textContent = "Base carregada!";
-      carregamentoMensagem.textContent =
-        `${professores.length} professores disponíveis para consulta.`;
+      if (origem === "api") {
+        carregamentoTitulo.textContent = "Base atualizada carregada!";
+        carregamentoMensagem.textContent =
+          `${professores.length} professores disponíveis • dados vindos da planilha.`;
+      } else {
+        carregamentoBase.classList.add("aviso");
+        carregamentoTitulo.textContent = "Base reserva carregada";
+        carregamentoMensagem.textContent =
+          `${professores.length} professores disponíveis • a API não respondeu e o arquivo local foi usado.`;
+      }
 
       dicaBusca.textContent =
         `${professores.length} professores na base • pesquise por qualquer parte do nome.`;
@@ -171,7 +159,7 @@ function carregarBaseProfessores() {
         setTimeout(() => {
           carregamentoBase.hidden = true;
         }, 300);
-      }, 450);
+      }, origem === "api" ? 450 : 1000);
 
       abrirProfessorDaURL();
     })
@@ -179,17 +167,65 @@ function carregarBaseProfessores() {
       console.error("Erro ao carregar professores:", err);
 
       carregamentoBase.hidden = false;
-      carregamentoBase.classList.remove("oculto");
+      carregamentoBase.classList.remove("oculto", "aviso");
       carregamentoBase.classList.add("erro");
 
       carregamentoTitulo.textContent =
         "Não foi possível carregar a base de professores.";
 
       carregamentoMensagem.textContent =
-        "Confira o arquivo professores.json ou a URL da API e tente novamente.";
+        "A API e a base local falharam. Confira a implantação do Apps Script e o arquivo professores.json.";
 
       botaoTentarNovamente.hidden = false;
     });
+}
+
+async function carregarFonteDados() {
+  let erroApi = null;
+
+  if (API_URL.trim()) {
+    try {
+      const listaApi = await buscarLista(API_URL, "API");
+      return { lista: listaApi, origem: "api" };
+    } catch (erro) {
+      erroApi = erro;
+      console.warn("API indisponível. Tentando base local...", erro);
+    }
+  }
+
+  try {
+    const listaLocal = await buscarLista(BASE_LOCAL_URL, "base local");
+    return { lista: listaLocal, origem: "local" };
+  } catch (erroLocal) {
+    const mensagemApi = erroApi ? ` API: ${erroApi.message}.` : "";
+    throw new Error(
+      `Não foi possível carregar nenhuma fonte.${mensagemApi} Base local: ${erroLocal.message}.`
+    );
+  }
+}
+
+async function buscarLista(url, nomeFonte) {
+  const resposta = await fetch(url, { cache: "no-store" });
+
+  if (!resposta.ok) {
+    throw new Error(`${nomeFonte} retornou HTTP ${resposta.status}`);
+  }
+
+  const json = await resposta.json();
+
+  if (json && json.sucesso === false) {
+    throw new Error(json.mensagem || `${nomeFonte} informou erro`);
+  }
+
+  const lista = Array.isArray(json)
+    ? json
+    : (json && Array.isArray(json.dados) ? json.dados : null);
+
+  if (!lista) {
+    throw new Error(`${nomeFonte} não retornou uma lista válida`);
+  }
+
+  return lista;
 }
 
 function normalizarRegistro(item) {

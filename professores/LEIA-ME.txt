@@ -64,3 +64,16 @@ Se essa página for somente para o suporte, o ideal é publicar em uma área com
 
 Não considere "esconder a URL" ou colocar senha apenas no JavaScript como proteção real:
 qualquer dado entregue ao navegador pode ser inspecionado por quem tiver acesso à página.
+
+
+API CONFIGURADA NESTA VERSÃO
+----------------------------
+https://script.google.com/macros/s/AKfycbwkXi13cjf_j5ik-h2XczwHnNnPZS0aMc8mcPlocgHaQhQPo4KG4Hn9n1F4O-PnuvdU9Q/exec
+
+A lógica agora é:
+1. tenta carregar a API do Google Apps Script;
+2. se a API falhar ou devolver conteúdo inválido, usa professores.json;
+3. se as duas fontes falharem, mostra o botão "Tentar novamente".
+
+Se aparecer "Base atualizada carregada!", os dados vieram da planilha.
+Se aparecer "Base reserva carregada", a API falhou e o JSON local foi usado.

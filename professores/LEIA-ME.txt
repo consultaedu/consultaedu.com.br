@@ -1,0 +1,66 @@
+CONSULTAEDU — CONSULTA INTERNA DE PROFESSORES
+================================================
+
+ARQUIVOS
+--------
+index.html
+style.css
+script.js
+professores.json
+Codigo.gs
+
+O site foi preparado para funcionar imediatamente com o arquivo professores.json.
+Você NÃO precisa criar uma API para fazer o primeiro teste.
+
+COMO TESTAR / PUBLICAR AGORA
+----------------------------
+1. Coloque index.html, style.css, script.js e professores.json na mesma pasta.
+2. Reaproveite da pasta atual do site:
+   - grupo-faveni.png
+   - favicon.png
+3. Publique essa pasta no GitHub Pages como você já faz no ConsultaEDU.
+4. Abra a página e pesquise um professor por qualquer parte do nome.
+
+BUSCA
+-----
+A busca:
+- aceita nome parcial;
+- ignora acentos;
+- ignora maiúsculas/minúsculas;
+- mostra opções quando há mais de um resultado;
+- usa o ID interno do professor depois que uma opção é escolhida.
+
+REGRAS DAS AULAS
+----------------
+O site usa a base SALAS_AGRUPADAS:
+- mesmo professor + mesmo horário + mesmo Meet = uma sessão;
+- Projeto Integrador e Estágio compartilhados aparecem uma única vez;
+- os cursos atendidos ficam dentro da própria sessão;
+- se existirem duas salas diferentes no mesmo horário, ambas aparecem.
+
+MODO DINÂMICO COM GOOGLE SHEETS (OPCIONAL)
+-------------------------------------------
+Se quiser atualizar a base pelo Google Sheets sem trocar o professores.json:
+
+1. Abra a planilha que contém a aba SALAS_AGRUPADAS.
+2. Vá em Extensões > Apps Script.
+3. Cole o conteúdo do arquivo Codigo.gs.
+4. Implante como Aplicativo da Web.
+5. Copie a URL /exec.
+6. Abra script.js.
+7. Troque:
+      const API_URL = "";
+   por:
+      const API_URL = "SUA_URL_DO_APPS_SCRIPT";
+
+Quando API_URL estiver preenchida, o site usa a planilha.
+Quando estiver vazia, usa professores.json.
+
+IMPORTANTE SOBRE SEGURANÇA
+--------------------------
+A base contém horários e links do Google Meet.
+Se essa página for somente para o suporte, o ideal é publicar em uma área com acesso restrito
+(ex.: Cloudflare Access, login institucional ou outro controle de acesso).
+
+Não considere "esconder a URL" ou colocar senha apenas no JavaScript como proteção real:
+qualquer dado entregue ao navegador pode ser inspecionado por quem tiver acesso à página.

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConsultaEDU | Consulta de Professores</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    const MANUTENCAO = false;
+
+    if (MANUTENCAO) {
+      window.location.replace("/manutencao.html?origem=" + encodeURIComponent(location.pathname));
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css?v=1" />
+  <meta name="description" content="Consulta interna de professores e salas do Semipresencial.">
+  <meta name="robots" content="noindex,nofollow">
+</head>
+
+<body>
+  <div class="page-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="hero">
+    <nav class="topbar">
+      <div class="brand">
+        <img src="grupo-faveni.png" alt="Grupo Educacional FAVENI" class="brand-logo">
+
+        <div class="brand-divider"></div>
+
+        <div class="brand-text">
+          <strong>ConsultaEDU</strong>
+          <span>Consulta interna de professores</span>
+        </div>
+      </div>
+
+      <a class="topbar-link" href="https://consultaedu.com.br/">
+        ← Voltar ao Portal
+      </a>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-copy">
+        <div class="eyebrow">Ferramenta interna • Suporte</div>
+        <h1>Encontre o professor e a sala certa em segundos</h1>
+        <p>
+          Pesquise por qualquer parte do nome para verificar a aula acontecendo agora,
+          as aulas de hoje e a agenda semanal do professor.
+        </p>
+
+        <div class="hero-badges">
+          <span>🔎 Busca rápida</span>
+          <span>🟢 Aula agora</span>
+          <span>📅 Hoje</span>
+          <span>🗓️ Semana</span>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="mini-card active">
+          <span>🟢</span>
+          <div>
+            <strong>Sala em tempo real</strong>
+            <small>Abra o Meet correto sem procurar no cronograma</small>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <span>🔎</span>
+          <div>
+            <strong>Nome parcial</strong>
+            <small>Digite apenas uma parte do nome do professor</small>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <span>👥</span>
+          <div>
+            <strong>Aulas compartilhadas</strong>
+            <small>Projeto e Estágio aparecem como uma única sessão</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <section class="search-card">
+      <div class="card-header">
+        <div class="card-icon">🔎</div>
+        <div>
+          <h2>Localizar professor</h2>
+          <p>Digite qualquer parte do nome. Não precisa escrever o nome completo.</p>
+        </div>
+      </div>
+
+      <div class="input-group pesquisa-professor">
+        <label for="buscaProfessor">Professor</label>
+
+        <div class="search-shell" id="searchShell">
+          <span aria-hidden="true">👨‍🏫</span>
+          <input
+            id="buscaProfessor"
+            type="search"
+            placeholder="Ex.: André, Ricardo, Adriana..."
+            autocomplete="off"
+            spellcheck="false"
+            disabled
+            aria-autocomplete="list"
+            aria-controls="sugestoesProfessores"
+          />
+          <button id="limparBusca" class="limpar-busca" type="button" title="Limpar busca" hidden>×</button>
+        </div>
+
+        <div id="sugestoesProfessores" class="sugestoes oculto" role="listbox"></div>
+
+        <p class="dica-busca" id="dicaBusca">
+          A busca ignora acentos e diferenças entre maiúsculas e minúsculas.
+        </p>
+      </div>
+    </section>
+
+    <div id="carregamentoBase" class="carregamento-base">
+      <div class="carregamento-spinner"></div>
+
+      <div class="carregamento-texto">
+        <strong id="carregamentoTitulo">Carregando a base de professores...</strong>
+        <span id="carregamentoMensagem">Na primeira abertura, isso pode levar alguns segundos.</span>
+      </div>
+
+      <button id="botaoTentarNovamente" class="botao-recarregar" hidden>
+        Tentar novamente
+      </button>
+    </div>
+  </main>
+
+  <section id="resultado" class="results-layout oculto">
+    <div class="result-card professor-resumo" id="resumoProfessor"></div>
+
+    <div class="result-card destaque" id="aulaAgora"></div>
+
+    <div class="result-card hoje-card">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">Agenda do dia</span>
+          <h2>📅 Aulas de hoje</h2>
+        </div>
+        <span id="contadorHoje" class="contador"></span>
+      </div>
+      <div id="aulasHoje"></div>
+    </div>
+
+    <div class="result-card grade-card">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">Visão completa</span>
+          <h2>🗓️ Agenda semanal</h2>
+        </div>
+        <span id="contadorSemana" class="contador"></span>
+      </div>
+      <div id="agendaSemana"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>ConsultaEDU | Consulta interna de professores</span>
+    <span>Versão 1.0 - By Marcos Daleprane</span>
+  </footer>
+
+  <script src="script.js?v=1"></script>
+</body>
+</html>

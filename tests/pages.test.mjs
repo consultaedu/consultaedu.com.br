@@ -62,6 +62,16 @@ test('Cloudflare execution context never replaces the fetch implementation for s
   const response=await worker.fetch(new Request(site+'/horarios/'),{ASSETS:{fetch:async()=>new Response('horarios')}},{waitUntil(){}});
   assert.equal(await response.text(),'horarios');
 });
+test('report pages and APIs reject deployment aliases and require Access on the approved hostname',async()=>{
+  const env={ASSETS:{fetch:async()=>new Response('private shell')}};
+  for(const hostname of ['59be6223.consultaedu-consolidado.pages.dev','preview.consultaedu-consolidado.pages.dev','unknown.example']){
+    for(const pathname of ['/relatorios/','/relatorios/index.html','/api/relatorios']){
+      assert.equal((await handleRequest(new Request('https://'+hostname+pathname,{headers:{'Cf-Access-Jwt-Assertion':'fake.fake.fake'}}),env)).status,404);
+    }
+  }
+  assert.equal((await handleRequest(new Request(site+'/relatorios/'),env)).status,401);
+  assert.equal(await (await handleRequest(new Request(site+'/relatorios/',{headers:{'Cf-Access-Jwt-Assertion':'test.session.token'}}),env)).text(),'private shell');
+});
 test('build includes every area, resolves local assets and links, and excludes internal files',()=>{
   const publicRoot=path.join(root,'dist');
   const exists=relative=>fs.existsSync(path.join(publicRoot,relative));

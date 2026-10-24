@@ -19,6 +19,13 @@ const jsonError = (status, message, extra = {}) => Response.json(
 
 export async function handleRequest(request, env, fetchUpstream = fetch) {
   const incoming = new URL(request.url);
+  const reportPath = incoming.pathname === '/relatorios' || incoming.pathname.startsWith('/relatorios/') || incoming.pathname.replace(/\/$/, '') === '/api/relatorios';
+  if (reportPath) {
+    // Only the hostname protected by the existing Access application can serve
+    // reports. Deployment aliases fail closed and need no wildcard Access rule.
+    if (incoming.hostname !== 'consultaedu-consolidado.pages.dev') return jsonError(404, 'Rota não encontrada.');
+    if (!request.headers.has('Cf-Access-Jwt-Assertion')) return jsonError(401, 'Entre com sua conta autorizada para acessar os relatórios.');
+  }
   if (!incoming.pathname.startsWith('/api/') && incoming.pathname !== '/api') return env.ASSETS.fetch(request);
   const route = ROUTES[incoming.pathname.replace(/\/$/, '')];
   if (!route) return jsonError(404, 'Rota não encontrada.');

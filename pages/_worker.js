@@ -1,5 +1,6 @@
 // Fixed destinations preserve the existing Workers and their production sites.
-// No browser cookies, credentials, or caller-supplied destination are forwarded.
+// No general browser credentials or caller-supplied destination are forwarded.
+// Reports reuse only their signed Access session at the protected report origin.
 const ROUTES = Object.freeze({
   '/api/email': ['GET', 'https://consultaedu-email-api.marcosdalleprane2.workers.dev/'],
   '/api/atividades': ['GET', 'https://consultaedu-gestores-api.marcosdalleprane2.workers.dev/'],
@@ -29,6 +30,13 @@ export async function handleRequest(request, env, fetchUpstream = fetch) {
   const target = new URL(destination);
   target.search = incoming.search;
   const headers = new Headers({Accept:'application/json'});
+  if (incoming.pathname.replace(/\/$/, '') === '/api/relatorios') {
+    // Reuse only the report application's signed session token. The protected
+    // upstream still validates it; no service token or unprotected origin exists.
+    const token = request.headers.get('Cf-Access-Jwt-Assertion');
+    if (!token || !/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(token)) return jsonError(401, 'Entre com sua conta autorizada para acessar os relatórios.');
+    headers.set('Cookie', 'CF_Authorization=' + token);
+  }
   let body;
   if (method === 'POST') {
     if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('Content-Type') || '')) return jsonError(415, 'Envie conteúdo JSON.');
@@ -50,7 +58,7 @@ export async function handleRequest(request, env, fetchUpstream = fetch) {
     // These are server-to-server requests. The existing Workers stay unchanged;
     // browser CORS is enforced at this same-origin gateway.
     const upstream = await fetchUpstream(target, {method, headers, body, redirect:'manual', signal:AbortSignal.timeout(60000), cache:'no-store'});
-    if (upstream.status >= 300 && upstream.status < 400) return jsonError(502, 'Redirecionamento inesperado da API.');
+    if (upstream.status >= 300 && upstream.status < 400) return jsonError(incoming.pathname.startsWith('/api/relatorios') ? 401 : 502, 'A API exige uma sessão autorizada ou retornou um redirecionamento inesperado.');
     const responseHeaders = new Headers({
       'Content-Type':upstream.headers.get('Content-Type') || 'application/json; charset=utf-8',
       'Cache-Control':'no-store',

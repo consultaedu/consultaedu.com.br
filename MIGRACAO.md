@@ -16,9 +16,11 @@ Somente arquivos públicos entram em `dist`. CNAMEs antigos, auditorias, código
 
 ## APIs
 
-O módulo `pages/_worker.js` atende apenas `/api/*`, com destinos fixos para os Workers existentes. Preserva parâmetros, bytes JSON dos envios e status da origem. Não encaminha cookies, Authorization nem Origin do navegador; o gateway valida a mesma origem na entrada. Não há destino controlado pelo cliente, cache de respostas ou alteração de dados em testes automatizados. O servidor anterior continua atendendo os sites antigos e não é removido.
+O módulo `pages/_worker.js` atende apenas `/api/*`, com destinos fixos para os Workers existentes. Preserva parâmetros, bytes JSON dos envios e status da origem. Não encaminha os cookies gerais, Authorization nem Origin do navegador; o gateway valida a mesma origem na entrada. Não há destino controlado pelo cliente, cache de respostas ou alteração de dados em testes automatizados. O servidor anterior continua atendendo os sites antigos e não é removido.
 
-Relatórios usam `/api/relatorios`, encaminhada para `https://relatorio.consultaedu.com.br/api/`. Portanto, esse domínio e sua rota Worker precisam continuar ativos. As APIs de horários e professores continuam nos deployments Apps Script existentes.
+Relatórios usam `/api/relatorios`, encaminhada para `https://relatorio.consultaedu.com.br/api/`. Esse domínio e sua rota Worker precisam continuar ativos. A origem está protegida pelo aplicativo Access `relatorio`. O gateway exige o cabeçalho de sessão do Access e encaminha somente esse token como cookie `CF_Authorization` ao mesmo aplicativo protegido, que mantém a validação criptográfica e a política existente. Sem sessão retorna 401; não há token de serviço, origem desprotegida nem bypass. A extensão dos destinos do aplicativo Access às rotas novas depende de autorização do responsável; a autenticação real ainda precisa ser homologada. As APIs de horários e professores continuam nos deployments Apps Script existentes.
+
+Na conferência anterior à migração, a API atual de dashboard retornou HTML do Google com título “Página não encontrada”, apesar do Content-Type application/json. Isso é uma falha pré-existente da origem e requer o deployment Apps Script ativo para correção; a variável atual não foi alterada.
 
 O service worker do suporte fica restrito a `/suporte/`, não armazena APIs e remove somente versões do próprio cache.
 
@@ -28,7 +30,7 @@ Executar `npm run build` e `npm test`. A suíte valida o gateway, assets e links
 
 Após a publicação, validar em pages.dev todas as áreas, consultas, filtros e estados de erro. Um teste real de chamado ou devolução precisa de um caso de homologação autorizado, pois grava nos serviços atuais.
 
-O endereço desejado é `consultaedu.grupofaveni.com.br`. Associá-lo primeiro em Custom domains do novo Pages. Depois, o responsável pelo DNS institucional deve cadastrar **um CNAME**, nome `consultaedu`, destino o hostname real do projeto `*.pages.dev`, sem protocolo ou caminho, TTL 300 se disponível. Não mudar nameservers, MX ou outros registros. Se já houver registro A/AAAA/CNAME no mesmo nome, registrar o valor anterior e substituir apenas esse registro após aprovação do responsável. CAA ou validações institucionais podem exigir participação adicional do administrador.
+O endereço desejado é `consultaedu.grupofaveni.com.br`. Associá-lo primeiro em Custom domains do novo Pages. Depois, o responsável pelo DNS institucional deve cadastrar **um CNAME**, nome `consultaedu`, destino `consultaedu-consolidado.pages.dev`, sem protocolo ou caminho, TTL 300 se disponível. Não mudar nameservers, MX ou outros registros. A consulta pública em 24/10/2026 retornou NS `ns81.domaincontrol.com` e `ns82.domaincontrol.com`, e o subdomínio desejado ainda não existia. Portanto, editar somente uma zona na HostGator pode não ter efeito: é necessário o responsável pela zona autoritativa atual. Se ele usa HostGator como painel de gestão, a ação pontual é adicionar esse CNAME no Editor de Zona; caso contrário, deve cadastrá-lo no provedor autoritativo. Se já houver registro A/AAAA/CNAME no mesmo nome no momento da ativação, registrar o valor anterior e substituir apenas esse registro após aprovação do responsável. CAA ou validações institucionais podem exigir participação adicional do administrador.
 
 ## Reversão e limites
 

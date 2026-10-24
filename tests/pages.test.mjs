@@ -8,13 +8,13 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const site='https://consultaedu-consolidado.pages.dev';
 test('API routes preserve queries, upstream status, and response body without sharing cookies', async()=>{
   let captured;
-  const response=await handleRequest(new Request(site+'/api/relatorios?semana=2026&t=1',{headers:{Cookie:'private=1',Authorization:'private',Origin:site}}),{},async(url,init)=>{
+  const response=await handleRequest(new Request(site+'/api/relatorios?semana=2026&t=1',{headers:{Cookie:'private=1',Authorization:'private',Origin:site,'Cf-Access-Jwt-Assertion':'header.payload.signature'}}),{},async(url,init)=>{
     captured={url:String(url),init};
     return new Response('{"ok":true,"dados":[]}',{status:200,headers:{'Content-Type':'application/json','Set-Cookie':'private=1','Access-Control-Allow-Origin':'https://old.invalid'}});
   });
   assert.equal(captured.url,'https://relatorio.consultaedu.com.br/api/?semana=2026&t=1');
   assert.equal(captured.init.headers.get('Origin'),null);
-  assert.equal(captured.init.headers.get('Cookie'),null);
+  assert.equal(captured.init.headers.get('Cookie'),'CF_Authorization=header.payload.signature');
   assert.equal(captured.init.headers.get('Authorization'),null);
   assert.equal(response.headers.get('Set-Cookie'),null);
   assert.equal(response.headers.get('Cache-Control'),'no-store');
@@ -44,11 +44,19 @@ test('gateway rejects unrelated origins, unknown routes, methods, oversized bodi
   assert.equal((await handleRequest(new Request(site+'/api/dashboard'),{},upstream)).status,502);
 });
 test('all read routes keep their existing Workers and distinguish upstream failure',async()=>{
-  for(const route of ['email','atividades','devolucoes/catalog','suporte/status','dashboard','relatorios']){
+  for(const route of ['email','atividades','devolucoes/catalog','suporte/status','dashboard']){
     const response=await handleRequest(new Request(site+'/api/'+route),{},async()=>new Response('{"sucesso":false}',{status:503}));
     assert.equal(response.status,503);
   }
   assert.equal((await handleRequest(new Request(site+'/api/dashboard'),{},async()=>{throw Error('offline');})).status,502);
+});
+test('reports never call protected upstream without a session, and preserve rejection by Access',async()=>{
+  let calls=0;
+  const upstream=async()=>{calls++;return new Response(null,{status:302,headers:{Location:'https://consultaedu.cloudflareaccess.com/login'}});};
+  assert.equal((await handleRequest(new Request(site+'/api/relatorios'),{},upstream)).status,401);
+  assert.equal(calls,0);
+  assert.equal((await handleRequest(new Request(site+'/api/relatorios',{headers:{'Cf-Access-Jwt-Assertion':'fake.fake.fake'}}),{},upstream)).status,401);
+  assert.equal(calls,1);
 });
 test('Cloudflare execution context never replaces the fetch implementation for static requests',async()=>{
   const response=await worker.fetch(new Request(site+'/horarios/'),{ASSETS:{fetch:async()=>new Response('horarios')}},{waitUntil(){}});

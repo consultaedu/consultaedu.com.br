@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ConsultaEDU Dashboard</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="page-bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header class="topbar">
+  <div>
+    <span class="eyebrow">ConsultaEDU</span>
+    <h1>Dashboard de Suporte</h1>
+    <p>Monitoramento dos chamados em tempo real.</p>
+  </div>
+
+  <div class="update-box">
+    <span>Atualizado</span>
+    <strong id="ultimaAtualizacao">--:--</strong>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="cards">
+    <div class="card aguardando">
+      <span>🟡</span>
+      <p>Aguardando</p>
+      <strong id="aguardando">0</strong>
+    </div>
+
+    <div class="card atendimento">
+      <span>🟢</span>
+      <p>Em atendimento</p>
+      <strong id="atendimento">0</strong>
+    </div>
+
+    <div class="card finalizado">
+      <span>✅</span>
+      <p>Finalizados</p>
+      <strong id="finalizado">0</strong>
+    </div>
+
+    <div class="card total">
+      <span>📈</span>
+      <p>Total</p>
+      <strong id="total">0</strong>
+    </div>
+  </section>
+
+  <section class="grid">
+
+    <div class="panel">
+      <h2>Últimos chamados</h2>
+      <div id="ultimosChamados" class="list"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Chamados por instituição</h2>
+      <div id="instituicoes" class="bars"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Tipos de problema</h2>
+      <div id="problemas" class="bars"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

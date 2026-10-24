@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ConsultaEDU Suporte</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <meta name="theme-color" content="#0b7f4f" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<div class="page-bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<main class="app">
+
+  <section id="telaCadastro" class="support-shell">
+    <div class="brand-card">
+      <div class="logo">
+        <img class="logo-img" src="icon-192.png" alt="ConsultaEDU Suporte">
+      </div>
+      <span>ConsultaEDU</span>
+      <h1>Suporte ao Professor</h1>
+      <p>Configure seus dados uma única vez para solicitar atendimento rapidamente.</p>
+    </div>
+
+    <div class="form-card">
+      <label>Nome do professor</label>
+      <input id="cadProfessor" type="text" placeholder="Digite seu nome completo" />
+
+      <label>Instituição</label>
+      <select id="cadInstituicao">
+        <option value="">Selecione</option>
+        <option value="UNIFAVENI">UNIFAVENI</option>
+        <option value="UNIABEU">UNIABEU</option>
+        <option value="UNISBA">UNISBA</option>
+      </select>
+
+      <button id="btnSalvarCadastro" class="primary-btn">Salvar dados</button>
+
+      <p id="msgCadastro" class="msg"></p>
+    </div>
+  </section>
+
+  <section id="telaPrincipal" class="support-shell hidden">
+
+    <section class="welcome-card">
+  <div>
+    <span>Olá, professor(a)</span>
+    <strong id="nomeProfessor"></strong>
+    <small id="instituicaoProfessor"></small>
+  </div>
+
+  <button id="btnEditar" class="edit-btn">Editar dados</button>
+</section>
+
+<section class="details-card">
+  <label>Tipo de problema</label>
+  <select id="problema">
+    <option value="Suporte solicitado">Suporte solicitado</option>
+    <option value="Problema no Google Meet">Problema no Google Meet</option>
+    <option value="Problema no Classroom">Problema no Classroom</option>
+    <option value="Alunos não conseguem acessar">Alunos não conseguem acessar</option>
+    <option value="Áudio ou câmera com problema">Áudio ou câmera com problema</option>
+    <option value="Outro problema">Outro problema</option>
+  </select>
+
+  <label>Observação opcional</label>
+  <textarea id="observacao" placeholder="Descreva rapidamente, se quiser..."></textarea>
+</section>
+
+<section class="sos-card">
+  <div class="sos-header">
+    <span>Atendimento</span>
+    <h2>Enviar chamado</h2>
+    <p>Revise as informações acima e toque no botão para notificar nossa equipe.</p>
+  </div>
+
+  <button id="btnChamar" class="sos-button">
+  <span id="iconeBotao">🚨</span>
+  <span id="textoBotao">CHAMAR SUPORTE</span>
+</button>
+
+  <p id="msgStatus" class="status"></p>
+</section>
+
+<section class="last-call">
+  <span>Último chamado</span>
+  <strong id="ultimoChamado">Nenhum chamado ainda</strong>
+</section>
+
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

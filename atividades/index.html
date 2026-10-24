@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ConsultaEDU | Central do Gestor</title>
+  <link rel="icon" type="image/png" href="../favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    const MANUTENCAO = false;
+
+    if (MANUTENCAO) {
+      window.location.replace("manutencao.html");
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css?v=4" />
+</head>
+<body>
+
+<div class="page-bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<header class="hero">
+  <nav class="topbar">
+    <div class="brand">
+      <img src="../grupo-faveni.png" alt="Grupo Educacional FAVENI" class="brand-logo">
+
+      <div class="brand-divider"></div>
+
+      <div class="brand-text">
+        <strong>ConsultaEDU</strong>
+        <span>Central do Gestor</span>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <a class="topbar-link topbar-link-primary"
+         href="https://drive.google.com/drive/folders/17gSb-hrzUjOFgUh5Elm1ynC3Q3QbxxSM?usp=sharing">
+        Acesso ao Drive Completo
+      </a>
+
+      <a class="topbar-link topbar-link-primary"
+         href="https://atividades.consultaedu.com.br/devolucao/">
+        Sistema de Devoluções
+      </a>
+    </div>
+  </nav>
+
+  <section class="hero-content">
+    <div class="hero-copy">
+      <div class="eyebrow">Área dos gestores</div>
+      <h1>Atividades presenciais em poucos cliques</h1>
+      <p>
+        Consulte atividades presenciais, listas de presença e pastas do Drive
+        organizadas por instituição, turma, curso e disciplina.
+      </p>
+    </div>
+
+    <div class="hero-panel">
+      <div class="mini-card active">
+        <span>📂</span>
+        <div>
+          <strong>Atividades</strong>
+          <small>Arquivos em PDF disponíveis</small>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <span>📋</span>
+        <div>
+          <strong>Listas</strong>
+          <small>Listas de presença por aula</small>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <span>🔗</span>
+        <div>
+          <strong>Drive</strong>
+          <small>Acesso direto às pastas</small>
+        </div>
+      </div>
+    </div>
+  </section>
+</header>
+
+<main class="container">
+
+  <section class="section-title">
+    <span>Consulta</span>
+    <h2>Localize os arquivos da aula</h2>
+  </section>
+
+  <section id="avisos" class="avisos"></section>
+
+  <section class="painel-filtros" id="painelFiltros">
+    <div class="campo">
+      <label for="instituicao">Instituição</label>
+      <select id="instituicao" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="turma">Turma</label>
+      <select id="turma" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="periodo">Período</label>
+      <select id="periodo" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo" id="campoIngresso" hidden>
+      <label for="ingresso">Mês de ingresso</label>
+      <select id="ingresso" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="curso">Curso</label>
+      <select id="curso" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="campo" id="campoDisciplina">
+      <label for="disciplina">Disciplina</label>
+      <select id="disciplina" disabled>
+        <option value="">Selecione</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="busca">
+    <input
+      id="pesquisa"
+      type="text"
+      placeholder="Buscar por aula, data, curso ou disciplina..."
+      disabled
+    />
+  </section>
+
+  <section id="carregamentoBase" class="carregamento-base" aria-live="polite">
+    <div class="carregamento-spinner" aria-hidden="true"></div>
+
+    <div class="carregamento-texto">
+      <strong id="carregamentoTitulo">Carregando a base de atividades...</strong>
+      <span id="carregamentoMensagem">Na primeira abertura, isso pode levar alguns segundos.</span>
+    </div>
+
+    <button id="botaoTentarNovamente" class="botao-recarregar" type="button" hidden>
+      Tentar novamente
+    </button>
+  </section>
+
+  <section id="status" class="status oculto">Aguardando carregamento...</section>
+
+  <section id="resultado" class="resultado"></section>
+
+</main>
+
+<footer class="footer">
+  <span>ConsultaEdu | Central do Gestor</span>
+  <span>Versão 2.0 - By Marcos Daleprane</span>
+</footer>
+
+<script src="app.js?v=19"></script>
+</body>
+</html>

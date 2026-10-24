@@ -71,6 +71,9 @@ test('report pages and APIs reject deployment aliases and require Access on the 
   }
   assert.equal((await handleRequest(new Request(site+'/relatorios/'),env)).status,401);
   assert.equal(await (await handleRequest(new Request(site+'/relatorios/',{headers:{'Cf-Access-Jwt-Assertion':'test.session.token'}}),env)).text(),'private shell');
+  const finalSite='https://consultaedu.grupofaveni.com.br';
+  assert.equal((await handleRequest(new Request(finalSite+'/relatorios/'),env)).status,401);
+  assert.equal(await (await handleRequest(new Request(finalSite+'/relatorios/',{headers:{'Cf-Access-Jwt-Assertion':'test.session.token'}}),env)).text(),'private shell');
 });
 test('build includes every area, resolves local assets and links, and excludes internal files',()=>{
   const publicRoot=path.join(root,'dist');

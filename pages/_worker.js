@@ -23,7 +23,7 @@ export async function handleRequest(request, env, fetchUpstream = fetch) {
   if (reportPath) {
     // Only the hostname protected by the existing Access application can serve
     // reports. Deployment aliases fail closed and need no wildcard Access rule.
-    if (incoming.hostname !== 'consultaedu-consolidado.pages.dev') return jsonError(404, 'Rota não encontrada.');
+    if (!['consultaedu-consolidado.pages.dev','consultaedu.grupofaveni.com.br'].includes(incoming.hostname)) return jsonError(404, 'Rota não encontrada.');
     if (!request.headers.has('Cf-Access-Jwt-Assertion')) return jsonError(401, 'Entre com sua conta autorizada para acessar os relatórios.');
   }
   if (!incoming.pathname.startsWith('/api/') && incoming.pathname !== '/api') return env.ASSETS.fetch(request);

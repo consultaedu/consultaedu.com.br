@@ -1,4 +1,4 @@
-const DASHBOARD_URL = "https://consultaedu-dashboard-api.marcosdalleprane2.workers.dev/dashboard";
+const DASHBOARD_URL = "/api/dashboard";
 
 export async function buscarDashboard() {
   const resposta = await fetch(`${DASHBOARD_URL}?t=${Date.now()}`);

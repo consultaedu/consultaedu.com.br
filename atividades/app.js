@@ -1,4 +1,4 @@
-const API_URL = "https://consultaedu-gestores-api.marcosdalleprane2.workers.dev/";
+const API_URL = "/api/atividades";
 const INTERVALO_ATUALIZACAO_MS = 5 * 60 * 1000;
 
 let dados = [];
@@ -54,7 +54,7 @@ async function carregarDados({ inicial = false, silencioso = false } = {}) {
   try {
     // Cada requisição recebe uma URL única para não reutilizar cache
     // do navegador, da Cloudflare ou de outro intermediário.
-    const url = new URL(API_URL);
+    const url = new URL(API_URL, window.location.origin);
     url.searchParams.set("_consultaedu", String(Date.now()));
 
     const resposta = await fetch(url.toString(), {

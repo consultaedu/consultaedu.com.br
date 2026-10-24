@@ -1,5 +1,5 @@
-const API_URL = "https://consultaedu-api.marcosdalleprane2.workers.dev/suporte/criar";
-const STATUS_URL = "https://consultaedu-api.marcosdalleprane2.workers.dev/suporte/status";
+const API_URL = "/api/suporte/criar";
+const STATUS_URL = "/api/suporte/status";
 
 const telaCadastro = document.getElementById("telaCadastro");
 const telaPrincipal = document.getElementById("telaPrincipal");

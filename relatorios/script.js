@@ -1,5 +1,5 @@
 const CONFIG = window.DASHBOARD_CONFIG || {};
-const API_URL = CONFIG.apiUrl || "/api/";
+const API_URL = CONFIG.apiUrl || "/api/relatorios";
 const Core = window.DashboardCore;
 
 const state = {

@@ -1,4 +1,4 @@
-const API_URL = "https://consultaedu-devolucoes-api.marcosdalleprane2.workers.dev";
+const API_URL = "/api/devolucoes";
 const MAX_FILE_MB = 15;
 const STORAGE_KEY = "consultaedu_devolucoes_v2";
 

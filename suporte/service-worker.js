@@ -1,4 +1,5 @@
-const CACHE_NAME = "consultaedu-suporte-v22";
+const CACHE_PREFIX = "consultaedu-suporte-pages-";
+const CACHE_NAME = CACHE_PREFIX + "v1";
 
 const STATIC_FILES = [
   "./",
@@ -23,7 +24,7 @@ self.addEventListener("activate", event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
+          .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME)
           .map(key => caches.delete(key))
       )
     )
@@ -44,6 +45,7 @@ self.addEventListener("fetch", event => {
 
   // Nunca cachear APIs externas
   if (
+    url.pathname.startsWith("/api/") ||
     url.hostname.includes("script.google.com") ||
     url.hostname.includes("script.googleusercontent.com") ||
     url.hostname.includes("workers.dev") ||

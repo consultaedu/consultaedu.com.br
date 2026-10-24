@@ -1,7 +1,7 @@
 {
   "name": "ConsultaEdu Suporte",
   "short_name": "Suporte",
-  "start_url": "./index.html",
+  "start_url": "/suporte/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#006b3f",
@@ -16,5 +16,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "id": "/suporte/",
+  "scope": "/suporte/"
 }
